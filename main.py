@@ -21,14 +21,16 @@ def main():
         print('Using device', params.device)
 
     # load dataset
-    os.system('./scripts/download_data.sh ' + params.dataset)
     data_root = os.path.join(params.datasets_dir, params.dataset)
+    if not os.path.isdir(data_root):
+        os.system('./scripts/download_data.sh ' + params.dataset)
+
+    # init datasets and dataloader
     transforms = torchvision.transforms.Compose([
         torchvision.transforms.Resize(params.image_size),
         torchvision.transforms.ToTensor()
     ])
 
-    # init datasets and dataloader
     train_dataset = Pix2PixDataset(os.path.join(data_root, params.train_suffix),
                                    transforms, params.input_first)
     valid_dataset = Pix2PixDataset(os.path.join(data_root, params.valid_suffix),
@@ -39,15 +41,18 @@ def main():
     valid_loader = torch.utils.data.DataLoader(valid_dataset, batch_size=params.batch_size,
                                                num_workers=params.num_workers, shuffle=False, pin_memory=True)
     if params.verbose:
-        print('Dataloader prepared')
+        print('Dataloaders prepared')
 
-    generator = build_generator(params)
+    # build models
+    generator = build_generator(params).to(params.device)
     discriminator = None
     if params.adversarial:
         pass
-    if params.verbose:
-        print('Model initialized')
 
+    if params.verbose:
+        print('Models initialized')
+
+    # train models
     experimenter = Experimenter(params, valid_loader, generator, discriminator)
     trainer = Trainer(params, experimenter, generator, discriminator)
     trainer.train(train_loader, valid_loader)

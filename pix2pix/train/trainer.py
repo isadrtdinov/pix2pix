@@ -28,6 +28,7 @@ class Trainer(object):
                 inputs = inputs.to(self.params.device)
                 targets = targets.to(self.params.device)
 
+                self.gen_optimizer.zero_grad()
                 outputs = self.generator(inputs)
                 loss = self.criterion(outputs, targets)
                 l1 = self.l1_criterion(outputs, targets)
@@ -36,8 +37,8 @@ class Trainer(object):
                 loss.backward()
                 self.gen_optimizer.step()
 
-            running_loss += loss * inputs.shape[0]
-            running_l1 += l1 * inputs.shape[0]
+            running_loss += loss.item() * inputs.shape[0]
+            running_l1 += l1.item() * inputs.shape[0]
 
         running_loss /= len(loader.dataset)
         running_l1 /= len(loader.dataset)
@@ -57,9 +58,7 @@ class Trainer(object):
                 valid_metrics = self.process_epoch_adversarial(valid_loader, train=False)
 
             self.experimenter.generate_examples(epoch, train_metrics, valid_metrics)
-            self.experimenter.save_checkpoint(epoch)
+            if epoch % self.params.checkpoints_freq:
+                self.experimenter.save_checkpoint(epoch)
 
-            if self.params.verbose:
-                print('{}/{} train loss: {}, valid loss: {}'.format(
-                    epoch, self.params.num_epochs, train_metrics[0], valid_metrics[0]
-                ))
+

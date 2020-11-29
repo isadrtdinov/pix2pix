@@ -15,7 +15,7 @@ class Pix2PixDataset(torch.utils.data.Dataset):
         return len(self.files)
 
     def __getitem__(self, index):
-        image = Image.open(self.root + self.files[index])
+        image = Image.open(os.path.join(self.root, self.files[index]))
         tensor = self.transforms(image)
         width = tensor.shape[-1] // 2
 

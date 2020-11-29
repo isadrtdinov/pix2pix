@@ -14,8 +14,8 @@ class Params:
     valid_suffix = 'val'
 
     # images params
-    image_size = (256, 256)
-    input_first = True
+    image_size = (256, 512)
+    input_first = False
     in_channels = 3
     out_channels = 3
 
@@ -23,6 +23,7 @@ class Params:
     runs_dir = 'runs'
     checkpoints_subdir = 'checkpoints'
     checkpoints_template = 'pix2pix{}.pt'
+    checkpoints_freq = 10
     examples_subdir = 'examples'
     metadata_file = 'metadata.json'
     metrics_file = 'metrics.json'
@@ -38,9 +39,9 @@ class Params:
     adversarial = False
 
     # train params
-    batch_size = 16
-    num_epochs = 60
-    lr = 1e-4
+    batch_size = 8
+    num_epochs = 30
+    lr = 3e-4
     loss = 'L1'
 
 

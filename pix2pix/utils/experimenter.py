@@ -1,5 +1,6 @@
 import os
 import json
+import time
 import torch
 from torchvision.transforms import ToPILImage
 from .utils import count_params
@@ -8,6 +9,7 @@ from .utils import count_params
 class Experimenter(object):
     def __init__(self, params, valid_loader, generator, discriminator=None):
         self.params = params
+        self.start_time = time.time()
         self.generator = generator
         self.discriminator = discriminator
         self.to_image = ToPILImage()
@@ -20,7 +22,7 @@ class Experimenter(object):
             os.mkdir(params.runs_dir)
 
         run_id = max((int(run) for run in os.listdir(params.runs_dir)), default=0) + 1
-        self.run_path = os.path.join(params.runs_dir, str(run_id))
+        self.run_path = os.path.join(params.runs_dir, '{:02d}'.format(run_id))
         os.mkdir(self.run_path)
 
         self.checkpoints_subdir = os.path.join(self.run_path, params.checkpoints_subdir)
@@ -36,8 +38,8 @@ class Experimenter(object):
         self.write_metadata(params, generator, discriminator)
 
         self.example_inputs = []
-        for subdir, example_id in zip(self.examples_subdirs, params.example_ids):
-            inputs, outputs = valid_loader[example_id]
+        for subdir, example_id in zip(self.examples_subdirs, params.examples_ids):
+            inputs, outputs = valid_loader.dataset[example_id]
             self.example_inputs += [inputs]
 
             inputs_file = str(example_id) + '_input.jpg'
@@ -75,10 +77,16 @@ class Experimenter(object):
             example_file = str(example_id) + '_' + str(epoch) + '.jpg'
             self.to_image(example).save(os.path.join(subdir, example_file))
 
-        self.metrics['train loss'] += train_metrics[0]
-        self.metrics['train L1'] += train_metrics[1]
-        self.metrics['valid loss'] += valid_metrics[0]
-        self.metrics['valid L1'] += valid_metrics[1]
+        self.metrics['train loss'] += [train_metrics[0]]
+        self.metrics['train L1'] += [train_metrics[1]]
+        self.metrics['valid loss'] += [valid_metrics[0]]
+        self.metrics['valid L1'] += [valid_metrics[1]]
+
+        if self.params.verbose:
+            print('{}/{} {}s, train loss = {:.4f}, valid_loss = {:.4f}'.format(
+                epoch, self.params.num_epochs, int(time.time() - self.start_time),
+                train_metrics[0], valid_metrics[0]
+            ))
 
     def save_checkpoint(self, epoch):
         state_dict = {'generator': self.generator.state_dict()}
