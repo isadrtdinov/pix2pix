@@ -58,3 +58,8 @@ class Trainer(object):
 
             self.experimenter.generate_examples(epoch, train_metrics, valid_metrics)
             self.experimenter.save_checkpoint(epoch)
+
+            if self.params.verbose:
+                print('{}/{} train loss: {}, valid loss: {}'.format(
+                    epoch, self.params.num_epochs, train_metrics[0], valid_metrics[0]
+                ))
