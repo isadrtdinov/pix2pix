@@ -58,7 +58,7 @@ class Trainer(object):
                 valid_metrics = self.process_epoch_adversarial(valid_loader, train=False)
 
             self.experimenter.generate_examples(epoch, train_metrics, valid_metrics)
-            if epoch % self.params.checkpoints_freq:
+            if epoch % self.params.checkpoints_freq == 0:
                 self.experimenter.save_checkpoint(epoch)
 
 
