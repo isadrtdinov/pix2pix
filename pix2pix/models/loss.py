@@ -4,7 +4,7 @@ from torch import nn
 
 class AdversarialLoss(nn.Module):
     def __init__(self, reconstruction_loss='L1', loss_lambda=1.0,
-                 real_label=0.0, fake_label=0.0):
+                 real_label=1.0, fake_label=0.0):
         super().__init__()
 
         self.bce = nn.BCEWithLogitsLoss()
