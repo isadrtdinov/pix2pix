@@ -30,7 +30,7 @@ class Pix2PixDataset(torch.utils.data.Dataset):
             inputs, outputs = tensor[..., width:], tensor[..., :width]
 
         if self.flip and random.random() > 0.5:
-            inputs, outputs = inputs[..., ::-1], outputs[..., ::-1]
+            inputs, outputs = torch.flip(inputs, dims=[-1]), torch.flip(outputs, dims=[-1])
 
         if self.normalize:
             inputs, outputs = (inputs - 0.5) / 0.5, (outputs - 0.5) / 0.5

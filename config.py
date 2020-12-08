@@ -12,8 +12,8 @@ class Params:
     dataset = 'facades'
     train_suffix = 'train'
     valid_suffix = 'val'
-    flip = False
-    normalize = False
+    flip = True
+    normalize = True
 
     # images params
     image_size = (256, 512)
