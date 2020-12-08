@@ -12,10 +12,12 @@ class Params:
     dataset = 'facades'
     train_suffix = 'train'
     valid_suffix = 'val'
+    flip = False
+    normalize = False
 
     # images params
     image_size = (256, 512)
-    input_first = False
+    input_left = False
     in_channels = 3
     out_channels = 3
 
@@ -37,12 +39,15 @@ class Params:
 
     # discriminator params
     adversarial = False
+    discriminator_channels = 64
+    discriminator_layers = 3
 
     # train params
     batch_size = 8
     num_epochs = 30
     lr = 3e-4
     loss = 'L1'
+    loss_lambda = 100.0
 
 
 def set_params():

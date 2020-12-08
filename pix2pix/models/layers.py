@@ -63,3 +63,17 @@ class UpsampleBlock(nn.Module):
         outputs = F.relu(self.conv1(outputs))
         outputs = F.relu(self.conv2(outputs))
         return outputs
+
+
+class ConvNormRelu(nn.Module):
+    def __init__(self, in_channels, out_channels, neg_slope=0.2):
+        super(ConvNormRelu, self).__init__()
+        self.neg_slope = neg_slope
+        self.conv = nn.Conv2d(in_channels, out_channels,
+                              kernel_size=4, stride=2, padding=1)
+        self.norm = nn.InstanceNorm2d(out_channels)
+
+    def forward(self, inputs):
+        outputs = self.norm(self.conv(inputs))
+        outputs = F.leaky_relu(outputs, self.neg_slope)
+        return outputs

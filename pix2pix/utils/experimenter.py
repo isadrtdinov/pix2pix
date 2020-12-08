@@ -13,10 +13,12 @@ class Experimenter(object):
         self.generator = generator
         self.discriminator = discriminator
         self.to_image = ToPILImage()
-        self.metrics = {
-            'train loss': [], 'valid loss': [],
-            'train L1': [], 'valid L1': []
-        }
+        self.metrics = {'train L1': [], 'valid L1': []}
+        if self.params.adversarial:
+            self.metrics.update({'train discr loss': [], 'train gen loss': [],
+                                 'valid discr loss': [], 'valid gen loss': []})
+        else:
+            self.metrics.update({'train loss': [], 'valid loss': []})
 
         if not os.path.isdir(params.runs_dir):
             os.mkdir(params.runs_dir)
@@ -65,27 +67,43 @@ class Experimenter(object):
         }
 
         if params.adversarial:
-            metadata.update({})
+            metadata.update({
+                'discriminator channels': params.discriminator_channels,
+                'discriminator layers': params.discriminator_layers,
+                'discriminator params': count_params(discriminator),
+                'loss lambda': params.loss_lambda
+            })
 
         metadata_path = os.path.join(self.run_path, params.metadata_file)
         with open(metadata_path, 'w') as metadata_file:
             json.dump(metadata, metadata_file)
 
     def generate_examples(self, epoch, train_metrics, valid_metrics):
-        example_outputs = self.generator(self.example_inputs.to(self.params.device)).cpu()
+        with torch.no_grad():
+            example_outputs = self.generator(self.example_inputs.to(self.params.device)).cpu()
+            if self.params.normalize:
+                example_outputs = example_outputs * 0.5 + 0.5
+
         for subdir, example_id, example in zip(self.examples_subdirs, self.params.examples_ids, example_outputs):
             example_file = str(example_id) + '_' + str(epoch) + '.jpg'
             self.to_image(example).save(os.path.join(subdir, example_file))
 
-        self.metrics['train loss'] += [train_metrics[0]]
-        self.metrics['train L1'] += [train_metrics[1]]
-        self.metrics['valid loss'] += [valid_metrics[0]]
-        self.metrics['valid L1'] += [valid_metrics[1]]
+        if self.params.adversarial:
+            self.metrics['train discr loss'] += [train_metrics[0]]
+            self.metrics['train gen loss'] += [train_metrics[1]]
+            self.metrics['valid discr loss'] += [valid_metrics[0]]
+            self.metrics['valid gen loss'] += [valid_metrics[1]]
+        else:
+            self.metrics['train loss'] += [train_metrics[0]]
+            self.metrics['valid loss'] += [valid_metrics[1]]
+
+        self.metrics['train L1'] += [train_metrics[-1]]
+        self.metrics['valid L1'] += [valid_metrics[-1]]
 
         if self.params.verbose:
-            print('{}/{} {}s, train loss = {:.4f}, valid_loss = {:.4f}'.format(
+            print('{}/{} {}s, train L1 = {:.4f}, valid L1 = {:.4f}'.format(
                 epoch, self.params.num_epochs, int(time.time() - self.start_time),
-                train_metrics[0], valid_metrics[0]
+                train_metrics[-1], valid_metrics[-1]
             ))
 
     def save_checkpoint(self, epoch):

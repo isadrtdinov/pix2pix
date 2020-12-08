@@ -5,10 +5,11 @@ from config import set_params
 from pix2pix.utils import (
     Experimenter,
     Pix2PixDataset,
+    Pix2PixTransforms,
     set_random_seed
 )
 from pix2pix.train import Trainer
-from pix2pix.models import build_generator
+from pix2pix.models import build_generator, build_discriminator
 
 
 def main():
@@ -31,10 +32,14 @@ def main():
         torchvision.transforms.ToTensor()
     ])
 
-    train_dataset = Pix2PixDataset(os.path.join(data_root, params.train_suffix),
-                                   transforms, params.input_first)
-    valid_dataset = Pix2PixDataset(os.path.join(data_root, params.valid_suffix),
-                                   transforms, params.input_first)
+    train_transforms = Pix2PixTransforms(params.image_size, flip=params.flip,
+                                         normalize=params.normalize)
+    valid_transforms = Pix2PixTransforms(params.image_size, normalize=params.normalize)
+
+    train_dataset = Pix2PixDataset(root=os.path.join(data_root, params.train_suffix),
+                                   input_left=params.input_left, transforms=train_transforms)
+    valid_dataset = Pix2PixDataset(root=os.path.join(data_root, params.valid_suffix),
+                                   input_left=params.input_left, transforms=valid_transforms)
 
     train_loader = torch.utils.data.DataLoader(train_dataset, batch_size=params.batch_size,
                                                num_workers=params.num_workers, shuffle=True, pin_memory=True)
@@ -47,7 +52,7 @@ def main():
     generator = build_generator(params).to(params.device)
     discriminator = None
     if params.adversarial:
-        pass
+        discriminator = build_discriminator(params)
 
     if params.verbose:
         print('Models initialized')
