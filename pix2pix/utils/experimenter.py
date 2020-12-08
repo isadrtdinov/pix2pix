@@ -101,8 +101,11 @@ class Experimenter(object):
         self.metrics['train L1'] += [train_metrics[-1]]
         self.metrics['valid L1'] += [valid_metrics[-1]]
 
+        train_metrics = '(' + ', '.join('{:.4f}'.format(value) for value in train_metrics) + ')'
+        valid_metrics = '(' + ', '.join('{:.4f}'.format(value) for value in valid_metrics) + ')'
+
         if self.params.verbose:
-            print('{}/{} {}s, train metrics = {}, valid metrics = {}'.format(
+            print('{}/{} {}s\n\ttrain metrics = {}\n\tvalid metrics = {}'.format(
                 epoch, self.params.num_epochs, int(time.time() - self.start_time),
                 train_metrics, valid_metrics
             ))
