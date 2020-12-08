@@ -26,6 +26,8 @@ class Experimenter(object):
         run_id = max((int(run) for run in os.listdir(params.runs_dir)), default=0) + 1
         self.run_path = os.path.join(params.runs_dir, '{:02d}'.format(run_id))
         os.mkdir(self.run_path)
+        if params.verbose:
+            print('Logging run at '.format(self.run_path))
 
         if params.save_checkpoints:
             self.checkpoints_subdir = os.path.join(self.run_path, params.checkpoints_subdir)
@@ -46,10 +48,10 @@ class Experimenter(object):
             self.example_inputs += [inputs]
 
             inputs_file = str(example_id) + '_input.jpg'
-            self.to_image(inputs).save(os.path.join(subdir, inputs_file), 'JPEG')
+            self.to_image(inputs * 0.5 + 0.5).save(os.path.join(subdir, inputs_file), 'JPEG')
 
             outputs_file = str(example_id) + '_output.jpg'
-            self.to_image(outputs).save(os.path.join(subdir, outputs_file), 'JPEG')
+            self.to_image(outputs * 0.5 + 0.5).save(os.path.join(subdir, outputs_file), 'JPEG')
 
         self.example_inputs = torch.stack(self.example_inputs)
 
