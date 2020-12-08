@@ -102,9 +102,9 @@ class Experimenter(object):
         self.metrics['valid L1'] += [valid_metrics[-1]]
 
         if self.params.verbose:
-            print('{}/{} {}s, train L1 = {:.4f}, valid L1 = {:.4f}'.format(
+            print('{}/{} {}s, train metrics = {}, valid metrics = {}'.format(
                 epoch, self.params.num_epochs, int(time.time() - self.start_time),
-                train_metrics[-1], valid_metrics[-1]
+                train_metrics, valid_metrics
             ))
 
     def save_checkpoint(self, epoch):
