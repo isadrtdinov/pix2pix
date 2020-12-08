@@ -5,7 +5,6 @@ from config import set_params
 from pix2pix.utils import (
     Experimenter,
     Pix2PixDataset,
-    Pix2PixTransforms,
     set_random_seed
 )
 from pix2pix.train import Trainer
@@ -32,14 +31,12 @@ def main():
         torchvision.transforms.ToTensor()
     ])
 
-    train_transforms = Pix2PixTransforms(params.image_size, flip=params.flip,
-                                         normalize=params.normalize)
-    valid_transforms = Pix2PixTransforms(params.image_size, normalize=params.normalize)
-
     train_dataset = Pix2PixDataset(root=os.path.join(data_root, params.train_suffix),
-                                   input_left=params.input_left, transforms=train_transforms)
+                                   size=params.image_size, input_left=params.input_left,
+                                   flip=params.flip, normalize=params.normalize)
     valid_dataset = Pix2PixDataset(root=os.path.join(data_root, params.valid_suffix),
-                                   input_left=params.input_left, transforms=valid_transforms)
+                                   size=params.image_size, input_left=params.input_left,
+                                   normalize=params.normalize)
 
     train_loader = torch.utils.data.DataLoader(train_dataset, batch_size=params.batch_size,
                                                num_workers=params.num_workers, shuffle=True, pin_memory=True)
@@ -52,7 +49,7 @@ def main():
     generator = build_generator(params).to(params.device)
     discriminator = None
     if params.adversarial:
-        discriminator = build_discriminator(params)
+        discriminator = build_discriminator(params).to(params.device)
 
     if params.verbose:
         print('Models initialized')

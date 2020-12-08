@@ -66,7 +66,7 @@ class Trainer(object):
                 logits = self.discriminator(torch.cat([inputs, outputs], dim=1))
                 fake_loss = self.criterion.discriminator_loss(logits, real=False)
 
-                logits = self.discriminator(torch.cat([inputs, targets]), dim=1)
+                logits = self.discriminator(torch.cat([inputs, targets], dim=1))
                 real_loss = self.criterion.discriminator_loss(logits, real=True)
                 discr_loss = 0.5 * (fake_loss + real_loss)
 
@@ -105,5 +105,6 @@ class Trainer(object):
                 valid_metrics = self.process_epoch_adversarial(valid_loader, train=False)
 
             self.experimenter.generate_examples(epoch, train_metrics, valid_metrics)
-            if epoch % self.params.checkpoints_freq == 0:
+            if self.params.save_checkpoints and epoch % self.params.checkpoints_freq == 0:
                 self.experimenter.save_checkpoint(epoch)
+

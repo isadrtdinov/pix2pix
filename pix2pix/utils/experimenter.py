@@ -27,8 +27,9 @@ class Experimenter(object):
         self.run_path = os.path.join(params.runs_dir, '{:02d}'.format(run_id))
         os.mkdir(self.run_path)
 
-        self.checkpoints_subdir = os.path.join(self.run_path, params.checkpoints_subdir)
-        os.mkdir(self.checkpoints_subdir)
+        if params.save_checkpoints:
+            self.checkpoints_subdir = os.path.join(self.run_path, params.checkpoints_subdir)
+            os.mkdir(self.checkpoints_subdir)
 
         examples_subdir = os.path.join(self.run_path, params.examples_subdir)
         os.mkdir(examples_subdir)

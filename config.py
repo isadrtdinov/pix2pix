@@ -23,6 +23,7 @@ class Params:
 
     # experimenter params
     runs_dir = 'runs'
+    save_checkpoints = False
     checkpoints_subdir = 'checkpoints'
     checkpoints_template = 'pix2pix{}.pt'
     checkpoints_freq = 10
@@ -38,13 +39,13 @@ class Params:
     generator_dropout = 0.5
 
     # discriminator params
-    adversarial = False
+    adversarial = True
     discriminator_channels = 64
     discriminator_layers = 3
 
     # train params
     batch_size = 8
-    num_epochs = 30
+    num_epochs = 10
     lr = 3e-4
     loss = 'L1'
     loss_lambda = 100.0
