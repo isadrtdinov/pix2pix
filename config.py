@@ -30,7 +30,7 @@ class Params:
     examples_subdir = 'examples'
     metadata_file = 'metadata.json'
     metrics_file = 'metrics.json'
-    examples_ids = [10, 20, 30, 40, 50]
+    examples_ids = [12, 17, 19, 41, 89]
 
     # generator params
     generator_channels = 64
@@ -40,16 +40,16 @@ class Params:
     generator_norm = 'instance'
 
     # discriminator params
-    adversarial = True
+    adversarial = False
     discriminator_channels = 64
     discriminator_layers = 3
     discriminator_norm = 'instance'
 
     # train params
     batch_size = 8
-    num_epochs = 10
-    lr = 1e-4
-    loss = 'L1'
+    num_epochs = 50
+    lr = 3e-4
+    loss = 'L2'
     loss_lambda = 100.0
 
 
