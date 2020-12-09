@@ -66,6 +66,7 @@ class Experimenter(object):
             'generator layers:': params.generator_layers,
             'generator kernel': params.generator_kernel,
             'generator dropout': params.generator_dropout,
+            'generator norm': params.generator_norm,
             'generator params': count_params(generator)
         }
 
@@ -73,6 +74,7 @@ class Experimenter(object):
             metadata.update({
                 'discriminator channels': params.discriminator_channels,
                 'discriminator layers': params.discriminator_layers,
+                'discriminator norm': params.discriminator_norm,
                 'discriminator params': count_params(discriminator),
                 'loss lambda': params.loss_lambda
             })

@@ -37,11 +37,13 @@ class Params:
     generator_layers = 4
     generator_kernel = 3
     generator_dropout = 0.5
+    generator_norm = 'instance'
 
     # discriminator params
     adversarial = True
     discriminator_channels = 64
     discriminator_layers = 3
+    discriminator_norm = 'instance'
 
     # train params
     batch_size = 8
