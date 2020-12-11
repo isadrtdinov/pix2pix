@@ -29,5 +29,12 @@ then
   tar -xf night2day.tar.gz
   rm night2day.tar.gz
   mv ./night2day/ datasets/night2day/
+
+elif [ $1 == 'churches' ]
+then
+  wget https://getfile.dokpub.com/yandex/get/https://yadi.sk/d/tYn_7I8kR2MpWg -O churches.tar.gz
+  tar -xf churches.tar.gz
+  rm churches.tar.gz
+  mv ./churches/ datasets/churches/
 fi
 
