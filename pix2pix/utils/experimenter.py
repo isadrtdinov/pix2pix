@@ -27,7 +27,7 @@ class Experimenter(object):
         self.run_path = os.path.join(params.runs_dir, '{:02d}'.format(run_id))
         os.mkdir(self.run_path)
         if params.verbose:
-            print('Logging run at '.format(self.run_path))
+            print('Logging run at {}'.format(self.run_path))
 
         if params.save_checkpoints:
             self.checkpoints_subdir = os.path.join(self.run_path, params.checkpoints_subdir)
