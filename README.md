@@ -22,7 +22,7 @@ python main.py
 
 The training process can be observed in these gifs:
 
-<img src="images/facades.gif" alt="drawing" width="312"/> <img src="images/maps.gif" alt="drawing" width="312"/> <img src="images/churches.gif" alt="drawing" width="312"/>
+<img src="images/facades.gif" alt="drawing" width="250"/> <img src="images/maps.gif" alt="drawing" width="250"/> <img src="images/churches.gif" alt="drawing" width="250"/>
 
 ## Results
 
