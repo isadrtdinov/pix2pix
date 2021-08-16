@@ -26,11 +26,6 @@ def main():
         os.system('./scripts/download_data.sh ' + params.dataset)
 
     # init datasets and dataloader
-    transforms = torchvision.transforms.Compose([
-        torchvision.transforms.Resize(params.image_size),
-        torchvision.transforms.ToTensor()
-    ])
-
     train_dataset = Pix2PixDataset(root=os.path.join(data_root, params.train_suffix),
                                    size=params.image_size, input_left=params.input_left,
                                    flip=params.flip, normalize=params.normalize)

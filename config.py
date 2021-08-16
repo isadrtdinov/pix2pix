@@ -5,7 +5,7 @@ class Params:
     # system params
     verbose = True
     device = None  # to be set on runtime
-    num_workers = 8
+    num_workers = 2
 
     # dataset params
     datasets_dir = 'datasets'
@@ -31,7 +31,7 @@ class Params:
     examples_subdir = 'examples'
     metadata_file = 'metadata.json'
     metrics_file = 'metrics.json'
-    examples_ids = [7, 10, 12, 17, 46]
+    examples_ids = [6, 9, 11, 16, 45]
 
     # generator params
     generator_channels = 64
