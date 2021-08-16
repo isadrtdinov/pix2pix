@@ -33,6 +33,12 @@ class Experimenter(object):
             self.checkpoints_subdir = os.path.join(self.run_path, params.checkpoints_subdir)
             os.mkdir(self.checkpoints_subdir)
 
+        if params.load_checkpoint is not None:
+            state_dict = torch.load(params.load_checkpoint)
+            self.generator.load_state_dict(state_dict['generator'])
+            if params.adversarial:
+                self.discriminator.load_state_dict(state_dict['discriminator'])
+
         examples_subdir = os.path.join(self.run_path, params.examples_subdir)
         os.mkdir(examples_subdir)
         self.examples_subdirs = []

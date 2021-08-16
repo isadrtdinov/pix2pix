@@ -32,9 +32,9 @@ then
 
 elif [ $1 == 'churches' ]
 then
-  wget https://getfile.dokpub.com/yandex/get/https://yadi.sk/d/tYn_7I8kR2MpWg -O churches.tar.gz
-  tar -xf churches.tar.gz
-  rm churches.tar.gz
+  wget https://getfile.dokpub.com/yandex/get/https://yadi.sk/d/EW8Jcmbzfg1big -O churches-v2.tar.gz
+  tar -xf churches-v2.tar.gz
+  rm churches-v2.tar.gz
   mv ./churches/ datasets/churches/
 fi
 

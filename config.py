@@ -9,7 +9,7 @@ class Params:
 
     # dataset params
     datasets_dir = 'datasets'
-    dataset = 'facades'
+    dataset = 'churches'
     train_suffix = 'train'
     valid_suffix = 'val'
     flip = True
@@ -23,14 +23,15 @@ class Params:
 
     # experimenter params
     runs_dir = 'runs'
-    save_checkpoints = False
+    save_checkpoints = True
+    load_checkpoint = None
     checkpoints_subdir = 'checkpoints'
     checkpoints_template = 'pix2pix{}.pt'
     checkpoints_freq = 10
     examples_subdir = 'examples'
     metadata_file = 'metadata.json'
     metrics_file = 'metrics.json'
-    examples_ids = [12, 17, 19, 41, 89]
+    examples_ids = [7, 10, 12, 17, 46]
 
     # generator params
     generator_channels = 64
@@ -47,7 +48,7 @@ class Params:
 
     # train params
     batch_size = 8
-    num_epochs = 50
+    num_epochs = 80
     lr = 3e-4
     loss = 'L2'
     loss_lambda = 100.0
