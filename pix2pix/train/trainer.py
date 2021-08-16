@@ -1,6 +1,7 @@
 import torch
 from ..models.loss import AdversarialLoss
 
+
 class Trainer(object):
     def __init__(self, params, experimenter, generator, discriminator=None):
         self.params = params
