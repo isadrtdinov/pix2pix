@@ -17,7 +17,7 @@ class Params:
 
     # images params
     image_size = (256, 512)
-    input_left = False
+    input_left = True
     in_channels = 3
     out_channels = 3
 
@@ -41,7 +41,7 @@ class Params:
     generator_norm = 'instance'
 
     # discriminator params
-    adversarial = False
+    adversarial = True
     discriminator_channels = 64
     discriminator_layers = 3
     discriminator_norm = 'instance'
