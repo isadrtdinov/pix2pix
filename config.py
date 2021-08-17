@@ -36,7 +36,7 @@ class Params:
     # generator params
     generator_channels = 64
     generator_layers = 4
-    generator_kernel = 3
+    generator_kernel = 5
     generator_dropout = 0.5
     generator_norm = 'instance'
 
