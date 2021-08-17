@@ -16,7 +16,7 @@ class Params:
     normalize = True
 
     # images params
-    image_size = (256, 512)
+    image_size = (512, 1204)
     input_left = True
     in_channels = 3
     out_channels = 3
