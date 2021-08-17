@@ -47,7 +47,7 @@ class Params:
     discriminator_norm = 'instance'
 
     # train params
-    batch_size = 8
+    batch_size = 4
     num_epochs = 80
     lr = 3e-4
     loss = 'L2'
