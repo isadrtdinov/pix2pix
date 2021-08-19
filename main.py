@@ -42,16 +42,20 @@ def main():
 
     # build models
     generator = build_generator(params).to(params.device)
-    discriminator = None
+    gen_optimizer = torch.optim.Adam(generator.parameters(), lr=params.lr)
+    discriminator, discr_optimizer = None, None
     if params.adversarial:
         discriminator = build_discriminator(params).to(params.device)
+        discr_optimizer = torch.optim.Adam(discriminator.parameters(), lr=params.lr)
 
     if params.verbose:
         print('Models initialized')
 
     # train models
-    experimenter = Experimenter(params, valid_loader, generator, discriminator)
-    trainer = Trainer(params, experimenter, generator, discriminator)
+    experimenter = Experimenter(params, valid_loader, generator, discriminator,
+                                gen_optimizer, discr_optimizer)
+    trainer = Trainer(params, experimenter, generator, discriminator,
+                      gen_optimizer, discr_optimizer)
     trainer.train(train_loader, valid_loader)
 
 

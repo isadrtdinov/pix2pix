@@ -3,15 +3,14 @@ from ..models.loss import AdversarialLoss
 
 
 class Trainer(object):
-    def __init__(self, params, experimenter, generator, discriminator=None):
+    def __init__(self, params, experimenter, generator, discriminator,
+                 gen_optimizer, discr_optimizer):
         self.params = params
         self.experimenter = experimenter
         self.generator = generator
-        self.gen_optimizer = torch.optim.Adam(self.generator.parameters(), lr=params.lr)
-
+        self.gen_optimizer = gen_optimizer
         self.discriminator = discriminator
-        if params.adversarial:
-            self.discr_optimizer = torch.optim.Adam(self.discriminator.parameters(), lr=params.lr)
+        self.discr_optimizer = discr_optimizer
 
         self.l1_criterion = torch.nn.L1Loss()
         if params.adversarial:
@@ -108,4 +107,3 @@ class Trainer(object):
             self.experimenter.generate_examples(epoch, train_metrics, valid_metrics)
             if self.params.save_checkpoints and epoch % self.params.checkpoints_freq == 0:
                 self.experimenter.save_checkpoint(epoch)
-

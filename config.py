@@ -48,7 +48,7 @@ class Params:
 
     # train params
     batch_size = 4
-    num_epochs = 80
+    num_epochs = 50
     lr = 3e-4
     loss = 'L2'
     loss_lambda = 100.0

@@ -7,11 +7,15 @@ from .utils import count_params
 
 
 class Experimenter(object):
-    def __init__(self, params, valid_loader, generator, discriminator=None):
+    def __init__(self, params, valid_loader, generator, discriminator,
+                 gen_optimizer, discr_optimizer):
         self.params = params
         self.start_time = time.time()
         self.generator = generator
         self.discriminator = discriminator
+        self.gen_optimizer = gen_optimizer
+        self.discr_optimizer = discr_optimizer
+
         self.to_image = ToPILImage()
         self.metrics = {'train L1': [], 'valid L1': []}
         if self.params.adversarial:
@@ -36,8 +40,10 @@ class Experimenter(object):
         if params.load_checkpoint is not None:
             state_dict = torch.load(params.load_checkpoint)
             self.generator.load_state_dict(state_dict['generator'])
+            self.gen_optimizer.load_state_dict(state_dict['gen_optimizer'])
             if params.adversarial:
                 self.discriminator.load_state_dict(state_dict['discriminator'])
+                self.discr_optimizer.load_state_dict(state_dict['discr_optimizer'])
 
         examples_subdir = os.path.join(self.run_path, params.examples_subdir)
         os.mkdir(examples_subdir)
@@ -121,9 +127,15 @@ class Experimenter(object):
             ))
 
     def save_checkpoint(self, epoch):
-        state_dict = {'generator': self.generator.state_dict()}
+        state_dict = {
+            'generator': self.generator.state_dict(),
+            'gen_optimizer': self.gen_optimizer.state_dict()
+        }
         if self.params.adversarial:
-            state_dict.update({'discriminator': self.discriminator.state_dict()})
+            state_dict.update({
+                'discriminator': self.discriminator.state_dict(),
+                'discr_optimizer': self.discr_optimizer.state_dict()
+            })
 
         checkpoint_file = self.params.checkpoints_template.format(epoch)
         checkpoint_file = os.path.join(self.checkpoints_subdir, checkpoint_file)
